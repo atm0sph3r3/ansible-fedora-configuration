@@ -1,0 +1,33 @@
+---
+jb_toolbox_version: '1.11.4269'
+username: ''
+hostname: workstation01
+pia_username: ''
+tor_browser_version: '8.0'
+burpsuite_version: '1.7.36'
+burpsuite_version_underscore: "{{burpsuite_version | regex_replace('\\.', '_')}}"
+packages: 
+  - vim
+  - tmux
+  - java-1.8.0-openjdk-devel
+  - dotnet-sdk-2.1
+  - ansible
+  - gnome-tweak-tool
+  - chrome-gnome-shell
+  - powerline
+  - tmux-powerline
+  - dnf-plugins-core
+  - docker-ce
+  - unzip
+  - vagrant
+  - vagrant-libvirt
+  - vagrant-libvirt-doc
+  - '@virtualization'
+  - terminator
+  - xclip
+  - npm
+  - redhat-rpm-config
+pip_packages:
+  - awscli
+  - aws-sam-cli
+...
