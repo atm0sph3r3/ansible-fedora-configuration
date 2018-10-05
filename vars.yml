@@ -1,6 +1,6 @@
 ---
 jb_toolbox_version: '1.11.4269'
-username: ''
+username: '' 
 hostname: workstation01
 pia_username: ''
 tor_browser_version: '8.0'
@@ -27,7 +27,12 @@ packages:
   - xclip
   - npm
   - redhat-rpm-config
+  - nfs-utils
 pip_packages:
   - awscli
   - aws-sam-cli
+firewall_services:
+  - rpc-bind
+  - mountd
+  - nfs
 ...

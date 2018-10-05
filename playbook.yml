@@ -159,4 +159,16 @@
         state: link
         src: "/home/{{username}}/bin/BurpSuiteCommunity/BurpSuiteCommunity"
         dest: "/home/{{username}}/bin/burpsuite"
+    - name: start and enable nfs-server
+      service:
+        name: nfs-server
+        enabled: yes
+        state: started
+        #- name: add openings in firwall
+        #  firewalld:
+        #    service: "{{item}}"
+        #    permanent: yes
+        #    immediate: yes
+        #    state: enabled
+        #  loop: "{{firewall_services}}"
 ...
