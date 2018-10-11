@@ -1,0 +1,144 @@
+---
+- name: update all packages
+  package:
+    name: "*"
+    state: latest
+
+- name: install necessary packages for ansible
+  package:
+    name: "{{ ansible_packages }}"
+    state: latest
+
+- name: set hostname
+  hostname:
+    name: "{{ hostname }}"
+
+- name: make local bin directory
+  file:
+    state: directory
+    path: "~/bin"
+  become: no
+
+- name: get ms rpm key
+  rpm_key:
+    state: present
+    key: 'https://packages.microsoft.com/keys/microsoft.asc'
+
+- name: get ms repo
+  get_url:
+    url: 'https://packages.microsoft.com/config/fedora/27/prod.repo'
+    dest: /etc/yum.repos.d/microsoft-prod.repo
+
+- name: get docker repo file
+  get_url:
+    url: 'https://download.docker.com/linux/fedora/docker-ce.repo'
+    dest: /etc/yum.repos.d/docker.repo
+
+- name: install necessary packages
+  package:
+    name: "{{ package_manager_installed_packages }}"
+    state: latest
+
+- name: start and enable services
+  systemd:
+    state: started
+    name: "{{ item }}"
+    enabled: yes
+  loop: "{{ systemd_services }}"
+
+- name: install ruby gems
+  gem:
+    name: "{{ item }}"
+    state: latest
+  loop: "{{ ruby_installed_gems }}"
+  become: no
+
+- name: add user to groups
+  user:
+    append: yes
+    groups: "{{ users_groups }}"
+    name: "{{ ansible_user }}"
+
+- name: remove retry file creation
+  replace:
+    path: /etc/ansible/ansible.cfg
+    regexp: '#retry_files_enabled = False'
+    replace: 'retry_files_enabled = False'
+
+- name: allow sudo without password each time
+  replace:
+    path: /etc/sudoers
+    regexp: '# %wheel        ALL=(ALL)       NOPASSWD: ALL'
+    replace: '%wheel	ALL=(ALL)	NOPASSWD: ALL'
+    validate: '/usr/sbin/visudo -cf %s'
+
+- name: get jetbrains toolbox
+  unarchive:
+    src: "https://download-cf.jetbrains.com/toolbox/jetbrains-toolbox-{{ jb_toolbox_version }}.tar.gz"
+    dest: /usr/local/bin
+    mode: 0755
+    remote_src: yes
+    creates: "/usr/local/bin/jetbrains-toolbox-{{ jb_toolbox_version }}"
+
+- name: get vimrc repo
+  git:
+    repo: 'https://github.com/tb120/vimrc.git'
+    clone: yes
+    depth: 1
+    dest: /usr/local/bin/vimrc
+    update: no
+
+- name: install vimrc files
+  command: sh /usr/local/bin/vimrc/install_awesome_vimrc.sh
+  args:
+    creates: "~/.vimrc"
+  become: no
+
+- name: install pip packages
+  pip:
+    name: "{{ pip_packages }}"
+    state: latest
+    extra_args: '--user'
+  become: no
+
+- name: get pia installer (pia)
+  get_url:
+    url: "https://www.privateinternetaccess.com/installer/pia-nm.sh"
+    dest: /usr/local/bin
+    mode: 0700
+
+- name: get tor browser
+  unarchive:
+    src: "https://dist.torproject.org/torbrowser/{{ tor_browser_version }}/tor-browser-linux64-{{ tor_browser_version }}_en-US.tar.xz"
+    dest: ~/bin
+    mode: 0700
+    remote_src: yes
+    creates: ~/bin/tor-browser_en-US
+  become: no
+
+- name: create alias for tor browser
+  file:
+    src: "~/bin/tor-browser_en-US/Browser/start-tor-browser"
+    path: "~/bin/tor-browser"
+    state: link
+  become: no
+
+- name: download burp suite community edition
+  get_url:
+    url: "https://portswigger.net/burp/releases/download?product=community&version={{burpsuite_version}}&type=linux"
+    dest: /usr/local/bin
+
+- name: add sym link for burp suite
+  file:
+    state: link
+    src: "~/bin/BurpSuiteCommunity/BurpSuiteCommunity"
+    dest: "~/bin/burpsuite"
+  become: no
+
+#- name: add openings in firewall
+#  firewalld:
+#    service: "{{item}}"
+#    permanent: yes
+#    immediate: yes
+#    state: enabled
+#  loop: "{{firewall_services}}"

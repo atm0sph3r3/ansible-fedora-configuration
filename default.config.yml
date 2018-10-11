@@ -1,12 +1,10 @@
 ---
 jb_toolbox_version: '1.11.4269'
-username: '' 
 hostname: workstation01
-pia_username: ''
 tor_browser_version: '8.0'
 burpsuite_version: '1.7.36'
 burpsuite_version_underscore: "{{burpsuite_version | regex_replace('\\.', '_')}}"
-packages: 
+package_manager_installed_packages:
   - vim
   - tmux
   - java-1.8.0-openjdk-devel
@@ -35,4 +33,35 @@ firewall_services:
   - rpc-bind
   - mountd
   - nfs
+ansible_packages:
+- libselinux-python
+- redhat-rpm-config
+- python-devel
+- python3-devel
+mozilla_packages:
+- '@development-tools'
+- '@c-development'
+- autoconf213
+- gtk2-devel
+- gtk3-devel
+- libXt-devel
+- GConf2-devel
+- dbus-glib-devel
+- yasm-devel
+- alsa-lib-devel
+- pulseaudio-libs-devel
+- hg
+- llvm
+- clang
+- llvm-devel
+- cargo
+ruby_installed_gems:
+  - gist
+systemd_services:
+  - docker
+  - libvirtd
+  - nfs-server
+users_groups:
+  - docker
+  - libvirt
 ...

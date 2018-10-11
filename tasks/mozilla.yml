@@ -1,0 +1,23 @@
+---
+- name: install packages from package manager
+  package:
+    name: "{{ mozilla_packages }}"
+    state: latest
+
+- name: create directory for source code
+  file:
+    path: '~/mozilla-dev'
+    state: directory
+
+- name: get bootstrap file
+  get_url:
+    url: https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
+    dest: '~/mozilla-dev'
+    mode: 0755
+
+- name: install cbindgen using cargo
+  command: cargo install cbindgen
+  register: cargo
+  changed_when: cargo.rc != 0 and cargo.rc != 101
+  failed_when: cargo.rc != 101 and cargo.rc != 0
+...

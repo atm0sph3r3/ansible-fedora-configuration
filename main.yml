@@ -1,0 +1,8 @@
+---
+- hosts: all
+  connection: local
+  vars_files:
+    - default.config.yml
+  tasks:
+    - include_tasks: tasks/default.yml
+    - include_tasks: tasks/mozilla.yml
