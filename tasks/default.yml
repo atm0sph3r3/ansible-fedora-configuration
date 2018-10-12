@@ -150,3 +150,9 @@
   command: bash ~/dotfiles/install.sh
   become: no
   changed_when: dotfile.changed
+
+- name: set inotify watches
+  sysctl:
+    name: fs.inotify.max_user_watches
+    state: present
+    value: 524288
