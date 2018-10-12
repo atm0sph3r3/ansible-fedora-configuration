@@ -55,6 +55,9 @@ mozilla_packages:
 - clang
 - llvm-devel
 - cargo
+- php
+- git
+- php-json
 ruby_installed_gems:
   - gist
 systemd_services:
@@ -64,4 +67,7 @@ systemd_services:
 users_groups:
   - docker
   - libvirt
+mozilla_arcanist_repos:
+  - {repo: 'https://github.com/phacility/libphutil.git', dest: ~/libphutil}
+  - {repo: 'https://github.com/phacility/arcanist.git', dest: ~/arcanist}
 ...

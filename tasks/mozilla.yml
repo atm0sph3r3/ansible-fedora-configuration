@@ -20,4 +20,11 @@
   register: cargo
   changed_when: cargo.rc != 0 and cargo.rc != 101
   failed_when: cargo.rc != 101 and cargo.rc != 0
+
+- name: checkout Arcanist
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.dest }}"
+  loop: "{{ mozilla_arcanist_repos }}"
+  become: no
 ...
