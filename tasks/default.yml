@@ -59,12 +59,6 @@
     groups: "{{ users_groups }}"
     name: "{{ ansible_user }}"
 
-- name: remove retry file creation
-  replace:
-    path: /etc/ansible/ansible.cfg
-    regexp: '#retry_files_enabled = False'
-    replace: 'retry_files_enabled = False'
-
 - name: allow sudo without password each time
   replace:
     path: /etc/sudoers
@@ -142,3 +136,17 @@
 #    immediate: yes
 #    state: enabled
 #  loop: "{{firewall_services}}"
+
+- name: clone dotfile repo
+  git:
+    repo: https://github.com/tb120/dotfiles
+    dest: ~/dotfiles
+    clone: yes
+    depth: 1
+  become: no
+  register: dotfile
+
+- name: install dotfiles
+  command: bash ~/dotfiles/install.sh
+  become: no
+  changed_when: dotfile.changed
