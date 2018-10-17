@@ -27,6 +27,7 @@ package_manager_installed_packages:
   - redhat-rpm-config
   - nfs-utils
   - golang
+  - android-tools
 pip_packages:
   - awscli
   - aws-sam-cli
