@@ -60,6 +60,7 @@ mozilla_packages:
 - php
 - git
 - php-json
+- ShellCheck
 ruby_installed_gems:
   - gist
 systemd_services:
